@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../fav/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../fav/favicon-16x16.png">
+    <link rel="manifest" href="../fav/site.webmanifest">
+    <link rel="mask-icon" href="../fav/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    {{!-- <script defer src="../agent-menu.js"></script> --}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>TC Networks - Time Sheet</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../fav/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../fav/favicon-16x16.png">
+
+    <style>
+        .time {
+            height: 60vh;
+        }
+
+        #menu {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #menu .has-submenu {
+            position: relative;
+        }
+
+        #menu .submenu {
+            display: none;
+            background-color: #0f172a; /* Tailwind slate-950 */
+            padding: 0;
+            list-style-type: none;
+            min-width: 150px;
+            text-align: left;
+        }
+
+        #menu .submenu li {
+            padding: 0.5rem;
+        }
+
+        #menu .submenu a {
+            display: block;
+            padding: 0.5rem;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        #menu .submenu a:hover {
+            background-color: #0f172a; /* Tailwind slate-700 */
+        }
+
+    </style>
+</head>
+<body class="bg-slate-800 h-screen flex relative">
+
+    <!-- Left Side Menu -->
+    <div class="w-1/6 bg-slate-950 text-white p-4 text-center">
+        <img src="../tc-logo-menu.png" style="width: 90%; height: auto; margin-bottom: 20px; padding: 1rem;">
+        <ul id="menu">
+            <li class="mb-2"><a href="./index.html" class="text-white hover:text-blue-400">Dashboard</a></li>
+            
+                
+        
+            <li class="mb-2 has-submenu">
+                <a href="#" class="text-white hover:text-blue-400">Helpdesk</a>
+                <ul class="submenu text-center">
+                    <li><a href="#" class="text-white hover:text-blue-400 text-center">ST Victor (2)</a></li>
+                    <li><a href="./index.html" class="text-white hover:text-blue-400 text-center">MSD (2)</a></li>
+                    <li><a href="#" class="text-white hover:text-blue-400 text-center">Blackhawk (5)</a></li>
+                    <li class="mb-2"><a href="#" class="text-white hover:text-blue-400 text-center">Assigned Tickets (2)</a></li>
+                    <li class="mb-2"><a href="#" class="text-white hover:text-blue-400 text-center">Closed Tickets (67)</a></li>
+                </ul>
+            </li>
+            
+            <li class="mb-2 has-submenu">
+                <a href="#" class="text-white hover:text-blue-400">Project Management</a>
+                <ul class="submenu text-center bg-slate-950">
+                    <li><a href="#" class="text-white hover:text-blue-400 text-center">Quoting</a></li>
+                    <li><a href="#" class="text-white hover:text-blue-400 text-center">Job Scheduling</a></li>
+                </ul>
+            </li>
+            <li class="mb-2 has-submenu">
+                <a href="#" class="text-white hover:text-blue-400">Time Management</a>
+                <ul class="submenu text-center">
+                    <li class="mb-2"><a href="./time.html" class="text-white hover:text-blue-400 text-center">Timesheet</a></li>
+                    <li class="mb-2"><a href="./off.html" class="text-white hover:text-blue-400 text-center">Request Time Off</a></li>
+                    <li class="mb-2"><a href="./cal.html" class="text-white hover:text-blue-400 text-center">PTO Calendar</a></li>
+                </ul>
+            </li>
+            
+            <li class="mb-2"><a href="#" class="text-white hover:text-blue-400">Logout</a></li>
+        </ul>
+    </div>
+    
+
+    <!-- Main Content -->
+    <div class="flex-1 p-8 relative">
+        <div class="max-w-full w-full min-h-full time bg-white p-8">
+           
+          <div class="w-60vw mx-auto p-4">
+            <!-- Header Section -->
+            <div class="flex justify-between items-center mb-6">
+                <button class="text-xl leading-none px-2 py-1 pb-4 pt-4 pl-8 pr-8 bg-green-500 text-white rounded-md p-8">+ Add</button>
+                <div>
+                    <p class="text-lg font-semibold mb-1">Today: Tuesday, May 21</p>
+                    <div class="flex gap-1">
+                      <button id="weekButton" class="px-4 py-2 rounded bg-gray-500 text-white">Week</button>
+                      <button id="dayButton" class="px-4 py-2 rounded bg-blue-500 text-white">Day</button>      
+                    </div>
+                </div>
+            </div>
+            <div class="relative h-[70vh] overflow-y-auto">
+            <!-- Tasks Section -->
+            <div class="bg-white shadow-lg rounded-lg p-4 mb-4">
+              <div id="dayView" style="display: block;">
+                <div class="grid grid-cols-7 gap-4 text-center text-sm mb-4 bg-white p-3 rounded-lg shadow">
+                  <button class="py-2 day-btn hover:border-b-4 border-orange-500" id="sun" onclick="loadDayTimesheet('sun')">Sun<br>0.00</button>
+                  <button class="py-2 day-btn hover:border-b-4 border-orange-500" id="mon" onclick="loadDayTimesheet('mon')">Mon<br>8.00</button>
+                  <button class="py-2 day-btn hover:border-b-4 border-orange-500" id="tue" onclick="loadDayTimesheet('tue')">Tue<br>9.00</button>
+                  <button class="py-2 day-btn hover:border-b-4 border-orange-500" id="wed" onclick="loadDayTimesheet('wed')">Wed<br>4.00</button>
+                  <button class="py-2 day-btn hover:border-b-4 border-orange-500" id="thu" onclick="loadDayTimesheet('thu')">Thu<br>0.00</button>
+                  <button class="py-2 day-btn hover:border-b-4 border-orange-500" id="fri" onclick="loadDayTimesheet('fri')">Fri<br>0.00</button>
+                  <button class="py-2 day-btn hover:border-b-4 border-orange-500" id="sat" onclick="loadDayTimesheet('sat')">Sat<br>0.00</button>
+
+              </div>
+
+                <div id="daygrid" class="overflow-y-auto h-96">
+                  
+                  
+                </div>
+              </div>
+
+
+              <div id="weekView" class="hidden">
+
+                <div class="mb-4 bg-white p-4 rounded shadow">
+                    <div class="flex flex-col justify-between mb-4">
+                        <span class="text-lg font-semibold">Managed Services July 1st 2016 (Black Hawk School District)</span>
+                        <span>Account Management Onsite</span>
+                    </div>
+                    <div class="grid grid-cols-7 gap-2">
+                      <div class="text-center">Sun<br><input type="text" class="border p-1 w-full text-center" placeholder="0.00"></div>
+                      <div class="text-center">Mon<br><input type="text" class="border p-1 w-full text-center" placeholder="0.00"></div>
+                      <div class="text-center">Tue<br><input type="text" class="border p-1 w-full text-center" placeholder="0.00"></div>
+                      <div class="text-center">Wed<br><input type="text" class="border p-1 w-full text-center" placeholder="0.00"></div>
+                      <div class="text-center">Thu<br><input type="text" class="border p-1 w-full text-center" placeholder="0.00"></div>
+                      <div class="text-center">Fri<br><input type="text" class="border p-1 w-full text-center" placeholder="0.00"></div>
+                      <div class="text-center">Sat<br><input type="text" class="border p-1 w-full text-center" placeholder="0.00"></div>
+                  </div>
+                </div>
+                <!-- Repeat for other services -->
+                <div class="mb-4 bg-white p-4 rounded shadow">
+                  <div class="flex flex-col justify-between mb-4">
+                      <span class="text-lg font-semibold">Managed Services (Monroe School District)</span>
+                      <span>Account Management Onsite</span>
+                  </div>
+
+
+                  <div class="grid grid-cols-7 gap-2">
+                      <div class="text-center">Sun<br><input type="text" class="border p-1 w-full text-center" placeholder="0.00"></div>
+                      <div class="text-center">Mon<br><input type="text" class="border p-1 w-full text-center" placeholder="0.00"></div>
+                      <div class="text-center">Tue<br><input type="text" class="border p-1 w-full text-center" placeholder="0.00"></div>
+                      <div class="text-center">Wed<br><input type="text" class="border p-1 w-full text-center" placeholder="0.00"></div>
+                      <div class="text-center">Thu<br><input type="text" class="border p-1 w-full text-center" placeholder="0.00"></div>
+                      <div class="text-center">Fri<br><input type="text" class="border p-1 w-full text-center" placeholder="0.00"></div>
+                      <div class="text-center">Sat<br><input type="text" class="border p-1 w-full text-center" placeholder="0.00"></div>
+                  </div>
+              </div>
+            </div>
+                
+    
+            <!-- Footer Section -->
+            
+        </div>
+        <div class="flex justify-between items-center bg-white p-3 rounded-lg mt-16 shadow">
+            <span class="font-bold">Total: 21.00</span>
+            <button class="bg-green-500 text-white px-4 py-2 rounded-md">Submit week for approval</button>
+        </div>
+            </div>
+        
+        </div>
+
+        <script>
+          const dayButton = document.getElementById('dayButton');
+        const weekButton = document.getElementById('weekButton');
+        const dayView = document.getElementById('dayView');
+        const weekView = document.getElementById('weekView');
+        const dayGrid = document.getElementById('daygrid')
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const submenus = document.querySelectorAll('.has-submenu > a');
+
+            submenus.forEach(menu => {
+                menu.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const submenu = this.nextElementSibling;
+                    if (submenu.style.display === 'block') {
+                        submenu.style.display = 'none';
+                    } else {
+                        submenu.style.display = 'block';
+                    }
+                });
+            });
+        });
+
+        dayButton.addEventListener('click', function() {
+            dayView.style.display = 'block';
+            weekView.style.display = 'none';
+            dayButton.classList.replace('bg-gray-500', 'bg-blue-500');
+            weekButton.classList.replace('bg-blue-500', 'bg-gray-500');
+        });
+
+        weekButton.addEventListener('click', function() {
+            dayView.style.display = 'none';
+            weekView.style.display = 'block';
+            dayButton.classList.replace('bg-blue-500', 'bg-gray-500');
+            weekButton.classList.replace('bg-gray-500', 'bg-blue-500');
+        });  
+
+        function highlightCurrentDay() {
+            const currentDate = new Date();
+            const dayOfWeek = currentDate.getDay(); // This returns 0 for Sunday through 6 for Saturday
+
+            const dayIds = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+            const activeDayId = dayIds[dayOfWeek];
+            const activeDayButton = document.getElementById(activeDayId);
+            loadDayTimesheet(activeDayId)
+
+            if (activeDayButton) {
+                activeDayButton.classList.add('border-b-4', 'border-green-500');
+            }
+        }
+
+        function loadDayTimesheet(day) {
+          const dayButtons = document.querySelectorAll('.day-btn'); // Assuming all buttons have a common class 'day-btn'
+          dayButtons.forEach(button => {
+              button.classList.remove('border-b-4', 'border-green-500');
+          });
+          const dayIds = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+          dayGrid.innerHTML = ''
+
+          if(day == "sun"){
+            document.getElementById('sun').classList.add('border-b-4', 'border-green-500')
+            dayGrid.innerHTML += ``
+          }
+
+          if(day == "mon"){
+            document.getElementById('mon').classList.add('border-b-4', 'border-green-500')
+            dayGrid.innerHTML += `<div class="mb-4 pb-2 border-b border-gray-300">
+                      <div class="flex flex-col justify-between items-start">
+                          <p class="font-bold mb-2">Managed Services (Monroe School District)</p>
+                          <div class="w-full flex justify-between items-center">
+                              <span>Account Management Onsite</span>
+                              <div class="flex items-center">
+                                  <span class="text-lg mr-2">8.00</span>
+                                  <button class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm">Start</button>
+                                  <button class="bg-blue-500 text-white px-3 py-1 ml-2 rounded-md text-sm">Edit</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>`
+          }
+
+          if(day == "tue"){
+            document.getElementById('tue').classList.add('border-b-4', 'border-green-500')
+            dayGrid.innerHTML += `<div class="mb-4 pb-2 border-b border-gray-300">
+                      <div class="flex flex-col justify-between items-start">
+                          <p class="font-bold mb-2">Managed Services (Monroe School District)</p>
+                          <div class="w-full flex justify-between items-center">
+                              <span>Account Management Onsite</span>
+                              <div class="flex items-center">
+                                  <span class="text-lg mr-2">8.00</span>
+                                  <button class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm">Start</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>`
+            dayGrid.innerHTML += `<div class="mb-4 pb-2 border-b border-gray-300">
+                      <div class="flex flex-col justify-between items-start">
+                          <p class="font-bold mb-2">Managed Services July 1st 2016 (Black Hawk School District)</p>
+                          <div class="w-full flex justify-between items-center">
+                              <span>Account Management Onsite</span>
+                              <div class="flex items-center">
+                                  <span class="text-lg mr-2">1.00</span>
+                                  <button class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm">Start</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+                
+              </div>`
+          }
+
+          if(day == "wed"){
+            document.getElementById('wed').classList.add('border-b-4', 'border-green-500')
+            dayGrid.innerHTML += `<div class="mb-4 pb-2 border-b border-gray-300">
+                      <div class="flex flex-col justify-between items-start">
+                          <p class="font-bold mb-2">Managed Services (Monroe School District)</p>
+                          <div class="w-full flex justify-between items-center">
+                              <span>Account Management Onsite</span>
+                              <div class="flex items-center">
+                                  <span class="text-lg mr-2">4.00</span>
+                                  <button class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm">Start</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>`
+
+
+
+                  
+          }
+
+          if(day == "thu"){
+            document.getElementById('thu').classList.add('border-b-4', 'border-green-500')
+            
+            dayGrid.innerHTML += `<div class="mb-4 pb-2 border-b border-gray-300">
+                      <div class="flex flex-col justify-between items-start">
+                          <p class="font-bold mb-2">Managed Services (Monroe School District)</p>
+                          <div class="w-full flex justify-between items-center">
+                              <span>Account Management Onsite</span>
+                              <div class="flex items-center">
+                                  <span class="text-lg mr-2">4.00</span>
+                                  <button class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm">Start</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>`
+                  dayGrid.innerHTML += `<div class="mb-4 pb-2 border-b border-gray-300">
+                      <div class="flex flex-col justify-between items-start">
+                          <p class="font-bold mb-2">Managed Services (Monroe School District)</p>
+                          <div class="w-full flex justify-between items-center">
+                              <span>Account Management Onsite</span>
+                              <div class="flex items-center">
+                                  <span class="text-lg mr-2">4.00</span>
+                                  <button class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm">Start</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>`
+
+                  dayGrid.innerHTML += `<div class="mb-4 pb-2 border-b border-gray-300">
+                      <div class="flex flex-col justify-between items-start">
+                          <p class="font-bold mb-2">Managed Services (Monroe School District)</p>
+                          <div class="w-full flex justify-between items-center">
+                              <span>Account Management Onsite</span>
+                              <div class="flex items-center">
+                                  <span class="text-lg mr-2">4.00</span>
+                                  <button class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm">Start</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>`
+
+                  dayGrid.innerHTML += `<div class="mb-4 pb-2 border-b border-gray-300">
+                      <div class="flex flex-col justify-between items-start">
+                          <p class="font-bold mb-2">Managed Services (Monroe School District)</p>
+                          <div class="w-full flex justify-between items-center">
+                              <span>Account Management Onsite</span>
+                              <div class="flex items-center">
+                                  <span class="text-lg mr-2">4.00</span>
+                                  <button class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm">Start</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>`
+
+                  dayGrid.innerHTML += `<div class="mb-4 pb-2 border-b border-gray-300">
+                      <div class="flex flex-col justify-between items-start">
+                          <p class="font-bold mb-2">Managed Services (Monroe School District)</p>
+                          <div class="w-full flex justify-between items-center">
+                              <span>Account Management Onsite</span>
+                              <div class="flex items-center">
+                                  <span class="text-lg mr-2">4.00</span>
+                                  <button class="bg-blue-500 text-white px-3 py-1 rounded-md text-sm">Start</button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>`
+          }
+
+          if(day == "fri"){
+            document.getElementById('fri').classList.add('border-b-4', 'border-green-500')
+            dayGrid.innerHTML += ``
+          }
+
+          if(day == "sat"){
+            document.getElementById('sat').classList.add('border-b-4', 'border-green-500')
+            dayGrid.innerHTML += ``
+          }
+        }
+
+        highlightCurrentDay()
+        </script>
+    </div>
+</body>
+</html>

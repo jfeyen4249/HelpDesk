@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            background-image: url('./img/bg.jpeg');
+            background-size: cover;
+        }
+    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TC Networks Support</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Quill CSS -->
+  <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+  <div class="w-full max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+    <div>
+      <h2 class="text-2xl font-semibold text-gray-700 text-center">Support Portal</h2>
+      <p class="text-gray-600 text-sm text-center">Log in or submit a ticket</p>
+    </div>
+    <div class="mt-6">
+      <!-- Toggle between Login and Help Desk forms -->
+      <div class="flex justify-center mb-6">
+        <button id="loginTab" class="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-l hover:bg-gray-300">Login</button>
+        <button id="ticketTab" class="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-r hover:bg-gray-300">Submit Ticket</button>
+      </div>
+      
+      <!-- Login Form -->
+      <form id="loginForm" class="hidden">
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-medium text-gray-600">Email</label>
+          <input type="email" id="email" class="w-full px-4 py-2 mt-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Enter your email">
+        </div>
+        <div class="mb-4">
+          <label for="password" class="block text-sm font-medium text-gray-600">Password</label>
+          <input type="password" id="password" class="w-full px-4 py-2 mt-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="Enter your password">
+        </div>
+        <button type="submit" class="w-full px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600">Log In</button>
+      </form>
+
+      <!-- Help Desk Ticket Form -->
+      <form id="ticketForm" class="hidden">
+        <div class="mb-4">
+          <label for="name" class="block text-sm font-medium text-gray-600">Your Name</label>
+          <input type="text" id="name" class="w-full px-4 py-2 mt-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500" placeholder="Enter your name">
+        </div>
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-medium text-gray-600">Email</label>
+          <input type="email" id="ticketEmail" class="w-full px-4 py-2 mt-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500" placeholder="Enter your email">
+        </div>
+        <div class="mb-4">
+          <label for="business" class="block text-sm font-medium text-gray-600">Business/School Name</label>
+          <input type="text" id="business" class="w-full px-4 py-2 mt-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500" placeholder="Enter business or school name">
+        </div>
+        <div class="mb-4">
+          <label for="priority" class="block text-sm font-medium text-gray-600">Priority</label>
+          <select id="priority" class="w-full px-4 py-2 mt-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            <option value="Urgent">Urgent</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="issue" class="block text-sm font-medium text-gray-600">Issue Description</label>
+          <div id="editor" class="w-full h-32 px-4 py-2 mt-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500"></div>
+        </div>
+        <div class="mb-4">
+          <label for="fileUpload" class="block text-sm font-medium text-gray-600">Upload Screenshot (JPEG Only)</label>
+          <input type="file" id="fileUpload" accept=".jpeg,.jpg" class="w-full px-4 py-2 mt-2 text-sm border rounded-lg focus:outline-none focus:ring-1 focus:ring-green-500">
+        </div>
+        <button type="submit" class="w-full px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600">Submit Ticket</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Quill JS -->
+  <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+  <script>
+    // Initialize Quill editor
+    const quill = new Quill('#editor', {
+      theme: 'snow',
+      placeholder: 'Describe your issue...',
+    });
+
+    // JavaScript to toggle forms
+    const loginTab = document.getElementById('loginTab');
+    const ticketTab = document.getElementById('ticketTab');
+    const loginForm = document.getElementById('loginForm');
+    const ticketForm = document.getElementById('ticketForm');
+
+    loginTab.addEventListener('click', () => {
+      loginForm.classList.remove('hidden');
+      ticketForm.classList.add('hidden');
+      loginTab.classList.add('bg-gray-300');
+      ticketTab.classList.remove('bg-gray-300');
+    });
+
+    ticketTab.addEventListener('click', () => {
+      ticketForm.classList.remove('hidden');
+      loginForm.classList.add('hidden');
+      ticketTab.classList.add('bg-gray-300');
+      loginTab.classList.remove('bg-gray-300');
+    });
+
+    // Show login form by default
+    loginTab.click();
+  </script>
+</body>
+</html>

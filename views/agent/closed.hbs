@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* You may adjust these values as needed */
+        .w-85 {
+            width: 75%;
+        }
+
+        .h-70 {
+            height: 75%;
+        }
+
+        #modal {
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            position: absolute;
+            left: 50%;
+            transform: translate(45%);
+        }
+
+        .ql-editor {
+            min-height: 96px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .ql-editor {
+            margin-bottom: 10px;
+        }
+
+        .w-half {
+            width: 50%;
+        }
+
+        .h-half {
+            height: 400px;
+        }
+
+        .chart-title {
+            font-weight: 600;
+            font-size: 30px;
+            text-decoration: underline;
+            margin-bottom: 5px;
+        }
+
+        .chart-height {
+            height: 600px;
+        }
+
+        .move {
+            margin-left: -30px;
+        }
+
+        .modal-width {
+            max-width: 30vw;
+            width: 30vw;
+        }
+
+        .tab-width {
+            max-width: 90vw;
+            width: 90vw;
+
+        }
+
+        .tablink {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .tabcontent {
+            border: #F35D07 4px solid;
+            border-radius: 10px;
+            min-height: 85vh;
+            max-height: 85vh;
+        }
+
+        .active {
+            background-color: #F35D07;
+            color: white;
+        }
+
+        .repair-reason {
+            width: 10%;
+        }
+
+        .repair-info {
+            width: 85%;
+        }
+
+        .repair-date {
+            width: 10%;
+        }
+
+        .orange-background {
+            background-color: #F35D07;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #explaination {
+            width: 95%;
+        }
+
+        .chat {
+            margin-top: 10px;
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .chat-start {
+            border: rgba(14, 188, 14, 0.479) solid 3px;
+        }
+
+        .chat-end {
+            border: rgba(225, 115, 12, 0.7) solid 3px;
+            text-align: right;
+        }
+
+        .resolution {
+            border: rgba(7, 105, 243, 0.7) solid 3px;
+            text-align: right;
+            background-color: rgba(7, 105, 243, 0.185);
+        }
+
+        .chat-end > div {
+            margin-right: 5px;
+        }
+
+        .internal {
+            border: #d78758ae;
+            background-color: #5a5959ae;
+        }
+
+        .internal-text {
+            position: absolute;
+            left: 0;
+            margin-left: 55px;
+            margin-top: -20px;
+            color: white;
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../fav/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../fav/favicon-16x16.png">
+    <link rel="manifest" href="../fav/site.webmanifest">
+    <link rel="mask-icon" href="../fav/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <script defer src="../agent-menu.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>TC Networks - Closed Tickets</title>
+</head>
+<body class="bg-slate-800 h-screen flex relative">
+
+    <!-- Left Side Menu -->
+    <div class="w-1/6 bg-slate-950 text-white p-4 text-center">
+        <img src="../../tc-logo-menu.png" style="width: 90%; height: auto; margin-bottom: 20px; padding: 1rem;">
+        <ul id="menu">
+            <!-- Add menu items -->
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-8 relative">
+        <div class="max-w-full w-full h-auto bg-white p-8">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl font-bold mb-4">Closed Tickets</h1>
+
+                <div class="flex items-center">
+                    <div class="flex items-center">
+                        <select class="bg-gray-100 border border-gray-300 px-4 py-2 rounded-l-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 mr-2">
+                            <option value="all">All</option>
+                            <option value="active">Blackhawk School District</option>
+                            <option value="active">Monroe School District</option>
+                            <option value="inactive">ST Victor's</option>
+                        </select>
+                        <input type="text" id="search" placeholder="Search..." class="bg-gray-100 border border-gray-300 px-4 py-2 rounded-l-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded-md ml-4"><i class="fa-solid fa-plus"></i> Add</button>
+                </div>
+            </div>
+
+            <!-- Ticket Table -->
+            <div class="container mx-auto max-h-[75vh] p-4 mt-8 bg-white h-auto overflow-y-auto" id="app">
+                <table class="min-w-full">
+                    <thead>
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                                <input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Ticket</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Title</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Requestor</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Assigned To</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-300">
+                         <tr class="hover:bg-gray-200">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">1</td>
+                <td class="px-6 py-4 whitespace-nowrap">Printer not working</td>
+                <td class="px-6 py-4 whitespace-nowrap">Ron Olson</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-white-500 text-black px-2 py-1 rounded-md text-xs">Closed</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">Joe Feyen</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-amber-600 text-white px-2 py-1 rounded-md text-xs">High</span>
+                </td>
+            </tr>
+            <!-- Sample Ticket Row -->
+
+            
+            <tr class="hover:bg-gray-200" ondblclick="ClosedTicket()">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">2</td>
+                <td class="px-6 py-4 whitespace-nowrap">Airplay</td>
+                <td class="px-6 py-4 whitespace-nowrap">John Smith</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block g-white-500 text-black px-2 py-1 p-4 rounded-md text-xs">Closed</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">Cody Brunson</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-sky-500 text-white px-2 py-1 rounded-md text-xs">Normal</span>
+                </td>
+            </tr>
+
+
+            <tr class="hover:bg-gray-200">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">6</td>
+                <td class="px-6 py-4 whitespace-nowrap">Cannot Connect to MSD</td>
+                <td class="px-6 py-4 whitespace-nowrap">John Smith</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-white-500 text-black px-2 py-1 p-4 rounded-md text-xs">Closed</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">Cody Brunson</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-sky-500 text-white px-2 py-1 rounded-md text-xs">Normal</span>
+                </td>
+            </tr>
+
+
+            <tr class="hover:bg-gray-200">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">8</td>
+                <td class="px-6 py-4 whitespace-nowrap">Email Blocked</td>
+                <td class="px-6 py-4 whitespace-nowrap">John Smith</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-white-500 text-black px-2 py-1 p-4 rounded-md text-xs">Closed</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">Joe Feyen</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-sky-500 text-white px-2 py-1 rounded-md text-xs">Normal</span>
+                </td>
+            </tr>
+
+
+            <tr class="hover:bg-gray-200">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">9</td>
+                <td class="px-6 py-4 whitespace-nowrap">Chromebook Pricing</td>
+                <td class="px-6 py-4 whitespace-nowrap">Ron Olson</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-white-500 text-black px-2 py-1 p-4 rounded-md text-xs">Closed</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">Matt Tyson</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-lime-500 text-white px-2 py-1 rounded-md text-xs">Low</span>
+                </td>
+            </tr>
+
+
+            <tr class="hover:bg-gray-200">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">10</td>
+                <td class="px-6 py-4 whitespace-nowrap">ACT testing on Chromebook</td>
+                <td class="px-6 py-4 whitespace-nowrap">John Smith</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-white-500 text-black  px-2 py-1 p-4 rounded-md text-xs">Closed</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">Cody Brunson</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-red-600 text-white px-2 py-1 rounded-md text-xs">Urgent</span>
+                </td>
+            </tr>
+
+             
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+     <!-- Footer Toolbar -->
+        <div class="absolute bottom-0 left-0 right-0 bg-slate-950 p-4" id="footer-toolbar" style="display: none;">
+            <div class="container mx-auto">
+                <div class="relative inline-block text-left">
+                    <button class="bg-green-500 text-white px-4 py-2 rounded-md mr-4" id="change-status-btn">
+                        <i class="fa-solid fa-bolt-lightning"></i> Change Status
+                        <i class="fas fa-chevron-up ml-2"></i>
+                    </button>
+                    <div class="hidden origin-bottom-right absolute border border-gray-900 right-0 text-center mb-4 bottom-full mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5" id="status-menu">
+                        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                            <a href="#" class="block  px-4 py-2 text-xl text-red-500 hover:bg-gray-100" role="menuitem">Closed</a>
+                            <a href="#" class="block  px-4 py-2 text-xl text-green-500 hover:bg-gray-100" role="menuitem">Closed</a>
+                            <a href="#" class="block  px-4 py-2 text-xl text-blue-500 hover:bg-gray-100" role="menuitem">Closed</a>
+                            <a href="#" class="block  px-4 py-2 text-xl text-orange-500 hover:bg-gray-100" role="menuitem">Closed</a>
+                            <a href="#" class="block  px-4 py-2 text-xl text-purple-500 hover:bg-gray-100" role="menuitem">Closed</a>
+                            <a href="#" class="block  px-4 py-2 text-xl text-gray-800 hover:bg-gray-100" role="menuitem">Closed</a>
+                            <!-- Add more status options as needed -->
+                        </div>
+                    </div>
+                </div>
+                <div class="relative inline-block text-left">
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" id="assign-ticket-btn">
+                        <i class="fa-solid fa-user"></i> Assign Ticket
+                        <i class="fas fa-chevron-up ml-2"></i>
+                    </button>
+                    <div class="hidden origin-bottom-right absolute right-0 bottom-full mt-2 w-56 mb-4 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5" id="assign-ticket-menu">
+                        <div class="py-1 text-center bg-blue-500" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                            <select class="block px-4 py-2 text-l m-4 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500" oninput="assignBTN()" id="assignee-select">
+                                <option value="">-- Assign to --</option>
+                                <option value="Cody Brunson">Cody Brunson</option>
+                                <option value="Joe Feyen">Joe Feyen</option>
+                                <option value="Matt Tyson">Matt Tyson</option>
+                                <!-- Add more options as needed -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative inline-block text-left">
+                    <button class="bg-orange-500 text-white px-4 py-2 rounded-md mr-4" id="change-priority-btn">
+                        <i class="fa-solid fa-code-merge"></i> Change Priority
+                        <i class="fas fa-chevron-up ml-2"></i>
+                    </button>
+                    <div class="hidden origin-bottom-right absolute border border-gray-900 right-0 mb-4 bottom-full mt-2 w-56 text-center rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5" id="priority-menu">
+                        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                            <a href="#" class="block px-4 py-2 text-xl text-red-500 hover:bg-gray-300" role="menuitem">Urgent</a>
+                            <a href="#" class="block px-4 py-2 text-xl text-amber-600 hover:bg-gray-300" role="menuitem">High</a>
+                            <a href="#" class="block px-4 py-2 text-xl text-sky-500 hover:bg-gray-300" role="menuitem">Normal</a>
+                            <a href="#" class="block px-4 py-2 text-xl text-lime-500 hover:bg-gray-300" role="menuitem">Low</a>
+                            <!-- Add more priority options as needed -->
+                        </div>
+                    </div>
+                </div>
+                <button class="bg-orange-500 text-white px-4 py-2 rounded-md mr-4"><i class="fa-solid fa-code-merge"></i> Merge Tickets</button>
+                <button class="bg-red-500 text-white px-4 py-2 rounded-md mr-4"><i class="fa-solid fa-circle-xmark"></i> Close Ticket</button>
+            </div>
+        </div>
+
+
+                <div id="ticketbox" class="fixed top-0 left-0 w-full h-full bg-gray-800 bg-opacity-90 hidden">
+            <div class="wpc tab-width mx-auto mt-2 bg-white p-8 rounded shadow-md relative">
+                <div class="absolute top-4 right-4">
+                    <button class="text-gray-600" onclick="closeModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="tabs">
+                    <button class="tablink p-2 ml-2 active" onclick="openTab('tab1')">Ticket Information</button>
+                    <button class="tablink p-2 hidden" onclick="openTab('tab2')">Chromebook Repairs</button>
+                    <button class="tablink p-2 hidden" onclick="openTab('tab3')" id="tab3-btn">Chromebook History</button>
+                </div>
+                <div id="tab1" class="tabcontent">
+                    <div class="wpc mx-auto mt-1 bg-white p-8 rounded">
+                        <h2 class="text-2xl font-bold text-center"></h2>
+                    </div>
+                    <div class="relative h-[70vh] overflow-y-auto">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr class="orange-background text-white">
+                                </tr>
+                            </thead>
+
+
+                            <tbody class="text-center border-collapse" id="ticket-notes">
+                                <tr class="">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="chat resolution">
+                                            <div class="mr-12 mt-4">The Apple TV was unplugged. It is working now.
+                                                <p class="mt-4 text-slate-600 text-right">Cody Brunson <br>Fri May 17 2024 2:36PM</p>
+                                                <div class="text-right text-blue-600"> <i class="material-icons">verified</i> Resolution</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            
+                                <tbody class="text-center border-collapse" id="ticket-notes">
+                                <tr class="">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="chat chat-end internal">
+                                            <div class="mr-12 mt-4">Internal Note
+                                                <p class="mt-4 text-slate-600 text-right">Cody Brunson <br>Fri May 17 2024 2:36PM</p>
+                                                <div class="text-right text-Yellow-600 internal-text"> Internal Note</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+
+                            <tbody class="text-center border-collapse" id="ticket-notes">
+                                <tr class="">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="chat chat-end">
+                                            <div class="mr-12 mt-4">That is the correct wifi. I will stop by to see take a look.
+                                                <p class="mt-4 text-gray-400 text-right">Cody Brunson <br>Fri May 17 2024 2:36PM</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                
+
+                                <tr class="">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="chat chat-start">
+                                            <div class="mr-12 mt-4">I have been trying to connect my phone to the Apple TV in the LMC to play a video on the TV. 
+                                                Every time I try to look for the TV it will not show up on my phone.
+                                                <p class="mt-4 text-gray-400 text-left">Cody B <br>Fri May 17 2024 2:25PM</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="chat chat-end">
+                                            <div class="mr-12 mt-4">Hello John, What wireless network are you connected to? Are you connected to MSD-Guest?
+                                                <p class="mt-4 text-gray-400 text-right">Cody Brunson <br>Fri May 17 2024 1:36PM</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="chat chat-start">
+                                            <div class="mr-12 mt-4">I have been trying to connect my phone to the Apple TV in the LMC to play a video on the TV. 
+                                                Every time I try to look for the TV it will not show up on my phone.
+                                                <p class="mt-4 text-gray-400 text-left">John Smith <br>Fri May 17 2024 1:25PM</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="tab2" class="tabcontent" style="display: none;">
+                    <h2 class="text-2xl font-bold text-center">Chromebook Repairs</h2>
+                    <div class="grid grid-cols-2 flex-grow">
+                        <div class="col-span-1" id="repair">
+                            <div class="mb-2 p-2 mr-8">
+                                <label for="modal-repairReason" class="block text-gray-600 text-sm font-medium">Repair Reasons</label>
+                                <select name="modal-repairReason" id="modal-repairReason-add" class="w-full py-2 border rounded-md focus:outline-none focus:border-blue-500"></select>
+                            </div>
+                            <div class="mb-2 p-2 mr-8">
+                                <label for="modal-returnSchool" class="block text-gray-600 text-sm font-medium">Return School</label>
+                                <select name="modal-returnSchool" id="modal-returnSchool-add" class="w-full py-2 border rounded-md focus:outline-none focus:border-blue-500"></select>
+                            </div>
+                            <div class="mb-2 p-2 mr-8">
+                                <label for="comment" class="block text-gray-600 text-sm font-medium">Comment</label>
+                                <input id="comment" name="comment" class="w-full px-1 py-2 border rounded-md focus:outline-none focus:border-blue-500" placeholder="Additional Comments"></input>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label for="explaination" class="block text-gray-600 text-sm font-medium mt-6">Reason for repair</label>
+                            <textarea id="explaination" rows="20" cols="30" name="explaination" class="w-full px-3 py-2 border rounded-md" placeholder="Explanation of Damages"></textarea>
+                        </div>
+                    </div>
+                    <div class="grid grid-flow-col justify-stretch">
+                        <button type="button" onclick="" id="send-repair" class="w-half bg-red-500 text-white p-1 m-3 rounded-md hover:bg-red-800 hidden">Submit Repair</button>
+                        <button type="button" onclick="" id="close-repair" class="w-half bg-green-500 text-white p-1 m-3 rounded-md hover:bg-green-800 hidden">Returned from Repair</button>
+                    </div>
+                </div>
+                <div id="tab3" class="tabcontent p-4" style="display: none; overflow-y: auto; max-height: 300px;">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr class="orange-background text-white">
+                                <th class="py-2 px-4 border">Action</th>
+                                <th class="py-2 px-4 border">Date</th>
+                                <th class="py-2 px-4 border">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center border-collapse" id="repair-table">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    <script>
+            function closeModal() {
+            document.getElementById('ticketbox').style.display = 'none';
+            }
+
+            function ClosedTab(tabName) {
+                var i;
+                var x = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+                document.getElementById(tabName).style.display = "block";
+            }
+
+            var assignTicketMenu = document.getElementById('assign-ticket-menu');
+            function toggleFilterMenu() {
+                var filterMenu = document.getElementById('filter-menu');
+                if (filterMenu.style.display === 'block') {
+                    filterMenu.style.display = 'none';
+                } else {
+                    filterMenu.style.display = 'block';
+                }
+            }
+
+            function ClosedTicket() {
+                let ticketBox = document.getElementById('ticketbox')
+                ticketBox.classList.remove('hidden')
+            }
+
+
+            function toggleSortMenu() {
+                var sortMenu = document.getElementById('sort-menu');
+                if (sortMenu.style.display === 'block') {
+                    sortMenu.style.display = 'none';
+                } else {
+                    sortMenu.style.display = 'block';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+            const checkbox = document.querySelectorAll('.form-checkbox');
+            const footerToolbar = document.getElementById('footer-toolbar');
+
+            checkbox.forEach(function(item) {
+                item.addEventListener('change', function() {
+                    if (this.checked) {
+                        footerToolbar.style.display = 'block';
+                    } else {
+                        footerToolbar.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        function ClosedTab(tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            event.currentTarget.className += " active";
+
+            getRepairInfo(deviceStatus);
+        }
+
+        document.getElementById('change-status-btn').addEventListener('click', function() {
+            var statusMenu = document.getElementById('status-menu');
+            statusMenu.classList.toggle('hidden');
+        });
+
+        document.getElementById('assign-ticket-btn').addEventListener('click', function() {
+            var assignTicketMenu = document.getElementById('assign-ticket-menu');
+            assignTicketMenu.classList.toggle('hidden');
+        });
+
+        function assignBTN() {
+            assignTicketMenu.classList.toggle('hidden');
+        }
+
+        document.getElementById('change-priority-btn').addEventListener('click', function() {
+            var priorityMenu = document.getElementById('priority-menu');
+            priorityMenu.classList.toggle('hidden');
+        });
+        </script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="../agent-menu.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <title>TC Networks - Dashboard</title>
+</head>
+<body class="bg-slate-800 h-screen flex relative">
+
+    <!-- Left Side Menu -->
+    <div class="w-1/6 bg-slate-950 text-white p-4 text-center">
+        <img src="../tc-logo-menu.png" style="width: 90%; height: auto; margin-bottom: 20px; padding: 1rem;">
+        <ul id="menu">
+            
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-8 overflow-y-auto">
+        <!-- Summary Boxes -->
+        <div class="grid grid-cols-4 gap-4 mb-8">
+            <!-- Box 1 -->
+            <div class="bg-blue-500 text-white rounded-lg p-4 shadow flex justify-between items-center">
+                <div>
+                    <h2 class="text-3xl font-bold" id="totalTickets"></h2>
+                    <p class="text-sm">Total Open Tickets</p>
+                </div>
+                <div class="text-5xl opacity-30">
+                   <i class="fa-solid fa-ticket"></i>
+                </div>
+            </div>
+            <!-- Box 2 -->
+            <div class="bg-green-500 text-white rounded-lg p-4 shadow flex justify-between items-center">
+                <div>
+                    <h2 class="text-3xl font-bold" id="newTickets"></h2>
+                    <p class="text-sm">New Tickets</p>
+                </div>
+                <div class="text-5xl opacity-30">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+            </div>
+            <!-- Box 3 -->
+            <div class="bg-yellow-500 text-white rounded-lg p-4 shadow flex justify-between items-center">
+                <div>
+                    <h2 class="text-3xl font-bold">44</h2>
+                    <p class="text-sm">Average First Response Time</p>
+                </div>
+                <div class="text-5xl opacity-30">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </div>
+            <!-- Box 4 -->
+            <div class="bg-red-500 text-white rounded-lg p-4 shadow flex justify-between items-center">
+                <div>
+                    <h2 class="text-3xl font-bold">85%</h2>
+                    <p class="text-sm">Average Approval Rating</p>
+                </div>
+                <div class="text-5xl opacity-30">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tickets Table -->
+        <div class="bg-white rounded-lg shadow p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Urgent Tickets</h2>
+            <!-- Table Container -->
+            <div class="max-h-[175px] overflow-y-auto">
+                <table class="w-full text-sm text-left text-gray-600">
+                    <thead class="text-gray-900 bg-gray-100">
+                        <tr>
+                            <th class="p-3">#</th>
+                            <th class="p-3">Title</th>
+                            <th class="p-3">Requestor</th>
+                            <th class="p-3">Customer</th>
+                            <th class="p-3">Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b hover:bg-green-400" onclick="alert('Ticket Clicked')">
+                            <td class="p-3">154</td>
+                            <td class="p-3">Printer not working</td>
+                            <td class="p-3">Ron Olson</td>
+                            <td class="p-3">Monroe School District</td>
+                            <td class="p-3"><span class="bg-orange-200 text-orange-700 px-2 py-1 rounded">Urgent</span></td>
+                        </tr>
+                       
+                        <tr class="border-b  hover:bg-green-400" onclick="alert('Ticket Clicked')">
+                            <td class="p-3">1213</td>
+                            <td class="p-3">Files missing</td>
+                            <td class="p-3">Todd Paradis</td>
+                            <td class="p-3">Monroe School District</td>
+                            <td class="p-3"><span class="bg-orange-200 text-orange-700 px-2 py-1 rounded">Urgent</span></td>
+                        </tr>
+                       
+                        <tr class="border-b hover:bg-green-400" onclick="alert('Ticket Clicked')">
+                            <td class="p-3">1211</td>
+                            <td class="p-3">Camreras not working</td>
+                            <td class="p-3">Sahra Judd</td>
+                            <td class="p-3">Monroe School District</td>
+                            <td class="p-3"><span class="bg-orange-200 text-orange-700 px-2 py-1 rounded">Urgent</span></td>
+                        </tr>
+                       
+                       
+                        <tr class="border-b hover:bg-green-400" onclick="alert('Ticket Clicked')">
+                            <td class="p-3">1654</td>
+                            <td class="p-3">Internet not working</td>
+                            <td class="p-3">Willy Chambers</td>
+                            <td class="p-3">Blackhawk School District</td>
+                            <td class="p-3"><span class="bg-orange-200 text-orange-700 px-2 py-1 rounded">Urgent</span></td>
+                        </tr>
+                       
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pie Charts -->
+        <div class="grid grid-cols-4 gap-6">
+            <!-- Pie Chart 4 -->
+            <div class="bg-white rounded-lg p-6 shadow">
+                <h2 class="text-center font-bold mb-4">Assigned Tickets (<span id="count4"></span>)</h2>
+                <canvas id="chart4" class="w-full h-64"></canvas>
+            </div>
+
+            <!-- Pie Chart 1 -->
+            <div class="bg-white rounded-lg p-6 shadow">
+                <h2 class="text-center font-bold mb-4">Monroe School District (<span id="count1"></span>)</h2>
+                <canvas id="chart1" class="w-full h-64"></canvas>
+            </div>
+            <!-- Pie Chart 2 -->
+            <div class="bg-white rounded-lg p-6 shadow">
+                <h2 class="text-center font-bold mb-4">St. Victor (<span id="count2"></span>)</h2>
+                <canvas id="chart2" class="w-full h-64"></canvas>
+            </div>
+            <!-- Pie Chart 3 -->
+            <div class="bg-white rounded-lg p-6 shadow">
+                <h2 class="text-center font-bold mb-4">Blackhawk School District (<span id="count3"></span>)</h2>
+                <canvas id="chart3" class="w-full h-64"></canvas>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        let totalTickets = document.getElementById('totalTickets');
+        let newTickets = document.getElementById('newTickets');
+
+        function createPieChart(chartId, data, labels) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: false,
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Data for charts
+        const districtData = [
+            [5,1, 10, 3, 3], // Monroe
+            [1,5, 2, 1, 1],   // St. Victor
+            [3, 8, 5, 2, 1],   // Blackhawk
+            [0,6, 4, 2, 0]    // Assigned Tickets
+        ];
+        const labels = ['New', 'Open', 'In Progress', 'On Hold', 'Await Response'];
+
+        // Create charts
+        createPieChart('chart1', districtData[0], labels);
+        createPieChart('chart2', districtData[1], labels);
+        createPieChart('chart3', districtData[2], labels);
+        createPieChart('chart4', districtData[3], labels);
+
+        //alert(districtData[0][0])
+
+        totalTickets.innerText = districtData[0][1] + districtData[1][1] + districtData[2][1];
+        newTickets.innerText = districtData[0][0] + districtData[1][0] + districtData[2][0];
+
+        document.getElementById('count1').textContent = districtData[0].reduce((a, b) => a + b, 0);
+        document.getElementById('count2').textContent = districtData[1].reduce((a, b) => a + b, 0);
+        document.getElementById('count3').textContent = districtData[2].reduce((a, b) => a + b, 0);
+        document.getElementById('count4').textContent = districtData[3].reduce((a, b) => a + b, 0);
+
+    </script>
+</body>
+</html>

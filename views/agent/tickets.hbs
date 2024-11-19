@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* You may adjust these values as needed */
+        .w-85 {
+            width: 75%;
+        }
+
+        .h-70 {
+            height: 75%;
+        }
+
+        #modal {
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            position: absolute;
+            left: 50%;
+            transform: translate(45%);
+        }
+
+        .ql-editor {
+            min-height: 96px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .ql-editor {
+            margin-bottom: 10px;
+        }
+
+        .w-half {
+            width: 50%;
+        }
+
+        .h-half {
+            height: 400px;
+        }
+
+        .chart-title {
+            font-weight: 600;
+            font-size: 30px;
+            text-decoration: underline;
+            margin-bottom: 5px;
+        }
+
+        .chart-height {
+            height: 600px;
+        }
+
+        .move {
+            margin-left: -30px;
+        }
+
+        .modal-width {
+            max-width: 30vw;
+            width: 30vw;
+        }
+
+        .tab-width {
+            max-width: 90vw;
+            width: 90vw;
+
+        }
+
+        .tablink {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .tabcontent {
+            border: #F35D07 4px solid;
+            border-radius: 10px;
+            min-height: 85vh;
+            max-height: 85vh;
+        }
+
+        .active {
+            background-color: #F35D07;
+            color: white;
+        }
+
+        .repair-reason {
+            width: 10%;
+        }
+
+        .repair-info {
+            width: 85%;
+        }
+
+        .repair-date {
+            width: 10%;
+        }
+
+        .orange-background {
+            background-color: #F35D07;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        #explaination {
+            width: 95%;
+        }
+
+        .chat {
+            margin-top: 10px;
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .chat-start {
+            border: rgba(14, 188, 14, 0.479) solid 3px;
+        }
+
+        .chat-end {
+            border: rgba(225, 115, 12, 0.7) solid 3px;
+            text-align: right;
+        }
+
+        .resolution {
+            border: rgba(7, 105, 243, 0.7) solid 3px;
+            text-align: right;
+            background-color: rgba(7, 105, 243, 0.185);
+        }
+
+        .chat-end > div {
+            margin-right: 5px;
+        }
+
+        .internal {
+            border: #d78758ae;
+            background-color: #5a5959ae;
+        }
+
+        .internal-text {
+            position: absolute;
+            left: 0;
+            margin-left: 55px;
+            margin-top: -20px;
+            color: white;
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="apple-touch-icon" sizes="180x180" href="../fav/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../fav/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../fav/favicon-16x16.png">
+    <link rel="manifest" href="../fav/site.webmanifest">
+    <link rel="mask-icon" href="../fav/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <script defer src="../agent-menu.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>TC Networks - MSD</title>
+</head>
+<body class="bg-slate-800 h-screen flex relative">
+
+    <!-- Left Side Menu -->
+    <div class="w-1/6 bg-slate-950 text-white p-4 text-center">
+        <img src="../../tc-logo-menu.png" style="width: 90%; height: auto; margin-bottom: 20px; padding: 1rem;">
+        <ul id="menu">
+            <!-- Add menu items -->
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-8 relative">
+        <div class="max-w-full w-full h-auto bg-white p-8">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-2xl font-bold mb-4">Open Tickets</h1>
+
+                <div class="flex items-center">
+                    <div class="flex items-center">
+                        <select class="bg-gray-100 border border-gray-300 px-4 py-2 rounded-l-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 mr-2">
+                            <option value="all">All</option>
+                            <option value="active">Blackhawk School District</option>
+                            <option value="active">Monroe School District</option>
+                            <option value="inactive">ST Victor's</option>
+                        </select>
+                        <input type="text" id="search" placeholder="Search..." class="bg-gray-100 border border-gray-300 px-4 py-2 rounded-l-md focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded-md ml-4"><i class="fa-solid fa-plus"></i> Add</button>
+                </div>
+            </div>
+
+            <!-- Ticket Table -->
+            <div class="container mx-auto max-h-[75vh] p-4 mt-8 bg-white h-auto overflow-y-auto" id="app">
+                <table class="min-w-full">
+                    <thead>
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">
+                                <input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Ticket</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Title</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Requestor</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Assigned To</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-900 uppercase tracking-wider">Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-300">
+
+
+                <tr class="hover:bg-gray-200" onclick="location.href='/agent/ticket'">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">1</td>
+                <td class="px-6 py-4 whitespace-nowrap">Printer not working</td>
+                <td class="px-6 py-4 whitespace-nowrap">Ron Olson</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-green-500 text-white px-2 py-1 rounded-md text-xs">Open</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">Joe Feyen</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-amber-600 text-white px-2 py-1 rounded-md text-xs">High</span>
+                </td>
+            </tr>
+            <!-- Sample Ticket Row -->
+
+            
+            <tr class="hover:bg-gray-200" onclick="location.href='/agent/ticket'">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">2</td>
+                <td class="px-6 py-4 whitespace-nowrap">Airplay</td>
+                <td class="px-6 py-4 whitespace-nowrap">John Smith</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-blue-500 text-white px-2 py-1 p-4 rounded-md text-xs">In Progress</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">Cody Brunson</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-sky-500 text-white px-2 py-1 rounded-md text-xs">Normal</span>
+                </td>
+            </tr>
+
+
+            <tr class="hover:bg-gray-200" onclick="location.href='/agent/ticket'">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">6</td>
+                <td class="px-6 py-4 whitespace-nowrap">Cannot Connect to MSD</td>
+                <td class="px-6 py-4 whitespace-nowrap">John Smith</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-purple-500 text-white px-2 py-1 p-4 rounded-md text-xs">Awaiting Response</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">Cody Brunson</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-block bg-sky-500 text-white px-2 py-1 rounded-md text-xs">Normal</span>
+                </td>
+            </tr>
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+     <!-- Footer Toolbar -->
+        <div class="absolute bottom-0 left-0 right-0 bg-slate-950 p-4" id="footer-toolbar" style="display: none;">
+            <div class="container mx-auto">
+                <div class="relative inline-block text-left">
+                    <button class="bg-green-500 text-white px-4 py-2 rounded-md mr-4" id="change-status-btn">
+                        <i class="fa-solid fa-bolt-lightning"></i> Change Status
+                        <i class="fas fa-chevron-up ml-2"></i>
+                    </button>
+                    <div class="hidden origin-bottom-right absolute border border-gray-900 right-0 text-center mb-4 bottom-full mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5" id="status-menu">
+                        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                            <a href="#" class="block  px-4 py-2 text-xl text-red-500 hover:bg-gray-100" role="menuitem">New</a>
+                            <a href="#" class="block  px-4 py-2 text-xl text-green-500 hover:bg-gray-100" role="menuitem">Open</a>
+                            <a href="#" class="block  px-4 py-2 text-xl text-blue-500 hover:bg-gray-100" role="menuitem">In Progress</a>
+                            <a href="#" class="block  px-4 py-2 text-xl text-orange-500 hover:bg-gray-100" role="menuitem">Pending</a>
+                            <a href="#" class="block  px-4 py-2 text-xl text-purple-500 hover:bg-gray-100" role="menuitem">Awaiting Response</a>
+                            <a href="#" class="block  px-4 py-2 text-xl text-gray-800 hover:bg-gray-100" role="menuitem">On-hold</a>
+                            <!-- Add more status options as needed -->
+                        </div>
+                    </div>
+                </div>
+                <div class="relative inline-block text-left">
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded-md mr-4" id="assign-ticket-btn">
+                        <i class="fa-solid fa-user"></i> Assign Ticket
+                        <i class="fas fa-chevron-up ml-2"></i>
+                    </button>
+                    <div class="hidden origin-bottom-right absolute right-0 bottom-full mt-2 w-56 mb-4 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5" id="assign-ticket-menu">
+                        <div class="py-1 text-center bg-blue-500" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                            <select class="block px-4 py-2 text-l m-4 text-gray-700 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500" oninput="assignBTN()" id="assignee-select">
+                                <option value="">-- Assign to --</option>
+                                <option value="Cody Brunson">Cody Brunson</option>
+                                <option value="Joe Feyen">Joe Feyen</option>
+                                <option value="Matt Tyson">Matt Tyson</option>
+                                <!-- Add more options as needed -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative inline-block text-left">
+                    <button class="bg-orange-500 text-white px-4 py-2 rounded-md mr-4" id="change-priority-btn">
+                        <i class="fa-solid fa-code-merge"></i> Change Priority
+                        <i class="fas fa-chevron-up ml-2"></i>
+                    </button>
+                    <div class="hidden origin-bottom-right absolute border border-gray-900 right-0 mb-4 bottom-full mt-2 w-56 text-center rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5" id="priority-menu">
+                        <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                            <a href="#" class="block px-4 py-2 text-xl text-red-500 hover:bg-gray-300" role="menuitem">Urgent</a>
+                            <a href="#" class="block px-4 py-2 text-xl text-amber-600 hover:bg-gray-300" role="menuitem">High</a>
+                            <a href="#" class="block px-4 py-2 text-xl text-sky-500 hover:bg-gray-300" role="menuitem">Normal</a>
+                            <a href="#" class="block px-4 py-2 text-xl text-lime-500 hover:bg-gray-300" role="menuitem">Low</a>
+                            <!-- Add more priority options as needed -->
+                        </div>
+                    </div>
+                </div>
+                <button class="bg-orange-500 text-white px-4 py-2 rounded-md mr-4"><i class="fa-solid fa-code-merge"></i> Merge Tickets</button>
+                <button class="bg-red-500 text-white px-4 py-2 rounded-md mr-4"><i class="fa-solid fa-circle-xmark"></i> Close Ticket</button>
+            </div>
+        </div>
+
+    <script>
+            function closeModal() {
+            document.getElementById('ticketbox').style.display = 'none';
+            }
+
+            function openTab(tabName) {
+                var i;
+                var x = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+                document.getElementById(tabName).style.display = "block";
+            }
+
+            var assignTicketMenu = document.getElementById('assign-ticket-menu');
+            function toggleFilterMenu() {
+                var filterMenu = document.getElementById('filter-menu');
+                if (filterMenu.style.display === 'block') {
+                    filterMenu.style.display = 'none';
+                } else {
+                    filterMenu.style.display = 'block';
+                }
+            }
+
+            function openTicket() {
+                let ticketBox = document.getElementById('ticketbox')
+                ticketBox.classList.remove('hidden')
+            }
+
+
+            function toggleSortMenu() {
+                var sortMenu = document.getElementById('sort-menu');
+                if (sortMenu.style.display === 'block') {
+                    sortMenu.style.display = 'none';
+                } else {
+                    sortMenu.style.display = 'block';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+            const checkbox = document.querySelectorAll('.form-checkbox');
+            const footerToolbar = document.getElementById('footer-toolbar');
+
+            checkbox.forEach(function(item) {
+                item.addEventListener('change', function() {
+                    if (this.checked) {
+                        footerToolbar.style.display = 'block';
+                    } else {
+                        footerToolbar.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        function openTab(tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            event.currentTarget.className += " active";
+
+            getRepairInfo(deviceStatus);
+        }
+
+        document.getElementById('change-status-btn').addEventListener('click', function() {
+            var statusMenu = document.getElementById('status-menu');
+            statusMenu.classList.toggle('hidden');
+        });
+
+        document.getElementById('assign-ticket-btn').addEventListener('click', function() {
+            var assignTicketMenu = document.getElementById('assign-ticket-menu');
+            assignTicketMenu.classList.toggle('hidden');
+        });
+
+        function assignBTN() {
+            assignTicketMenu.classList.toggle('hidden');
+        }
+
+        document.getElementById('change-priority-btn').addEventListener('click', function() {
+            var priorityMenu = document.getElementById('priority-menu');
+            priorityMenu.classList.toggle('hidden');
+        });
+        </script>
+</body>
+</html>
